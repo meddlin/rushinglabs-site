@@ -26,15 +26,11 @@ const IndexPage = ({
 				<Image />
 			</div>
 
-			<hr />
-				{/* <BlogList /> */}
-
-				
-			<hr />
-
 			<Link to="/page-2/">Go to page 2</Link>
 
 			{Posts.length > 0 ? Posts : ''}
+
+			<Link to={`/blog`}>More...</Link>
 
 			<Bio />
 		</Layout>
