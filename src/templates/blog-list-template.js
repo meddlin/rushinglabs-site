@@ -1,10 +1,12 @@
 import React from "react";
 import { graphql } from "gatsby";
 import Layout from "../components/layout";
+import PaginationButtons from "../components/PaginationButtons";
 
 export default class BlogList extends React.Component {
     render() {
         const posts = this.props.data.allMarkdownRemark.edges;
+        const { currentPage, numPages } = this.props.pageContext;
 
         return (
             <Layout>
@@ -14,6 +16,8 @@ export default class BlogList extends React.Component {
                         <div key={node.fields.slug}>{title}</div>
                     );
                 })}
+
+                <PaginationButtons currentPage={currentPage} numPages={numPages} />
             </Layout>
         );
     }
