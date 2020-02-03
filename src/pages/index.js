@@ -1,11 +1,24 @@
 import React from "react";
 import { Link } from "gatsby";
+import styled from "styled-components";
 
 import Bio from "../components/Bio";
 import PostLink from "../components/post-link";
 import Layout from "../components/layout";
 import Image from "../components/image";
 import SEO from "../components/seo";
+
+const HorizontalContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+const VerticalContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    padding: 0 4em 0 4em;
+`;
 
 const IndexPage = ({
 	data: {
@@ -19,20 +32,15 @@ const IndexPage = ({
 	return (
 		<Layout>
 			<SEO title="Home" />
-			<h1>Hi people</h1>
-			<p>Welcome to your new Gatsby site.</p>
-			<p>Now go build something great.</p>
-			<div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-				<Image />
-			</div>
+			<HorizontalContainer>
+				{/* <Image /> */}
+				<Bio />
 
-			<Link to="/page-2/">Go to page 2</Link>
-
-			{Posts.length > 0 ? Posts : ''}
-
-			<Link to={`/blog`}>More...</Link>
-
-			<Bio />
+				<VerticalContainer>
+					{Posts.length > 0 ? Posts : ''}
+					<Link to={`/blog`}>More...</Link>
+				</VerticalContainer>
+			</HorizontalContainer>
 		</Layout>
 	);
 }
