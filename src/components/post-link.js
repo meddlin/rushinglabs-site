@@ -14,7 +14,10 @@ const PostLink = ({ post }) => (
     <div>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <ArticleHeading>
-                <Link style={{ boxShadow: 'none' }} to={post.frontmatter.path}>{post.frontmatter.title}</Link>
+                <Link style={{ boxShadow: 'none' }} to={post.frontmatter.path}>
+                    {post.frontmatter.title}
+                </Link>
+                {post.frontmatter.tags && post.frontmatter.tags.length > 0 ? post.frontmatter.tags[0] : ''}
             </ArticleHeading>
             <small>{post.frontmatter.date}</small>
         </div>
