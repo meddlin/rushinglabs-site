@@ -12,7 +12,6 @@ export default class BlogList extends React.Component {
 		return (
 			<Layout>
 				{posts.map( ({ node }) => {
-					// const title = node.frontmatter.title || node.fields.slug;
 					return (
 						<PostLink key={node.fields.slug} post={node} />
 					);

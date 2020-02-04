@@ -29,15 +29,15 @@ const Header = ({ siteTitle }) => (
 			</HeaderText>
 		</div>
 	</HeaderContainer>
-)
+);
 	
 Header.propTypes = {
 	siteTitle: PropTypes.string,
-}
+};
 
 Header.defaultProps = {
 	siteTitle: ``,
-}
+};
 
 export default Header;
 	
