@@ -5,7 +5,6 @@ import styled from "styled-components";
 import Bio from "../components/Bio";
 import PostLink from "../components/post-link";
 import Layout from "../components/layout";
-import Image from "../components/image";
 import SEO from "../components/seo";
 
 const HorizontalContainer = styled.div`

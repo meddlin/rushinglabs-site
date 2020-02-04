@@ -6,9 +6,13 @@ import SEO from "../components/seo";
 const CpatPage = () => {
     return (
         <div>
-            <SEO title="CPAT" />
+            <SEO title="cpat" />
 
-            <h1>CPAT</h1>
+            <Layout>
+                <h1>CPAT</h1>
+
+                <Link to="https://github.com/meddlin/cpat">Project Repo</Link>
+            </Layout>
         </div>
     );
 }
