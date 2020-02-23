@@ -9,14 +9,14 @@ import SEO from "../components/seo";
 
 const HorizontalContainer = styled.div`
     display: flex;
-    flex-direction: row;
+	flex-direction: row;
 `;
 
 const VerticalContainer = styled.div`
     display: flex;
     flex-direction: column;
 
-    padding: 0 4em 0 4em;
+    padding: 0 3em 0 3em;
 `;
 
 const IndexPage = ({

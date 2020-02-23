@@ -6,28 +6,57 @@ const VerticalContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-content: center;
+    align-content: center;
+    align-self: flex-start;
 `;
+
 const ProfileSection = styled(VerticalContainer)`
 	flex-basis: 30%;
-	padding-left: 6em;
+	
 	padding-right: 2em;
 	border-right: 1px solid darkgray;
-	margin-right: 1em;
+    min-width: 280px;
+    
+    hr {
+        margin-top: 1.5em;
+    }
+`;
+
+const BioBlurb = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 15%;
+        margin-bottom: 10px;
+        border-radius: 100%;
+        min-width: 100px;
+        max-height: 100px;
+    }
+`;
+
+const SiteSections = styled.div`
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 `;
 
 const Bio = () => (
     <ProfileSection>
-        <img src="https://meddlin-web.s3.us-east-2.amazonaws.com/online-avatar.jpg" 
-            alt={`Darrien Rushing`}
-            style={{ width: '15%', marginBottom: 0, minWidth: 50, borderRadius: `100%`, }} />
-        {/* <Image fixed={data.avatar.childImageSharp.fixed} alt={author}
-            style={{ marginRight: rhythm(1 / 2), marginBottom: 0, minWidth: 50, borderRadius: `100%`, }} /> */}
-        <div>
-            I like building things almost as much as I like 
-            tearing them apart. I write about those things here.
-        </div>
-        <div style={{ marginTop: '5em' }}>
+        <BioBlurb>
+            <img src="https://meddlin-web.s3.us-east-2.amazonaws.com/online-avatar.jpg" alt={`Darrien Rushing`} />
+            {/* <Image fixed={data.avatar.childImageSharp.fixed} alt={author} /> */}
+            <div>
+                I like building things almost as much as I like 
+                tearing them apart. I write about those things here.
+            </div>
+        </BioBlurb>
+        <hr />
+        <SiteSections>
             <ul>
                 <li>
                     <Link to="/cpat/">CPAT</Link>
@@ -36,7 +65,7 @@ const Bio = () => (
                     <Link to="/about/">About</Link>
                 </li>
             </ul>
-        </div>
+        </SiteSections>
     
     {/* <div>social links</div> */}
     </ProfileSection>

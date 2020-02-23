@@ -22,7 +22,7 @@ const ArticlePreview = styled.p`
 
 const PostLink = ({ post }) => (
     <Article>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <ArticleHeading>
                 <Link style={{ boxShadow: 'none' }} to={post.frontmatter.path}>
                     {post.frontmatter.title}
