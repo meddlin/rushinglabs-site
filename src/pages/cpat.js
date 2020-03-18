@@ -133,7 +133,7 @@ const CpatPage = () => {
                         weeks, and some incredulous editing later and we had our ticket to IEEE. 
                     </p>
 
-                    <a href="https://ieeexplore.ieee.org/document/7119262">CPAT Research Paper</a>
+                    <a href="https://ieeexplore.ieee.org/document/7119262" style={{ color: 'white' }}>CPAT Research Paper</a>
 
                     <p>
                         <i>
