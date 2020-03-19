@@ -21,6 +21,22 @@ const Row = styled.div`
 const TitlePiece = styled(ColumnPiece)`
     font-family: 'Roboto', sans-serif;
     padding-left: 5em;
+
+    span {
+        font-size: 35px;
+        font-weight: 400;
+    }
+
+    @media only screen 
+        and (min-device-width: 350px) 
+        and (max-device-width: 650px) 
+    {
+        padding-left: 1em;
+
+        span {
+            font-size: 30px;
+        }
+    }
 `;
 
 const Subtitle = styled(ColumnPiece)`
@@ -31,11 +47,64 @@ const Subtitle = styled(ColumnPiece)`
     display; flex;
     flex-direction: row;
 
+    .title {
+        font-size: 35px;
+        font-weight: 400;
+    }
+    
+    .first {
+        margin-right: 150px;
+        font-size: 20px;
+        word-spacing: 2px;
+        font-weight: 300;
+    }
+
+    .second { 
+        margin-right: 150px;
+        font-size: 20px;
+        word-spacing: 2px;
+        font-weight: 300;
+    }
+
     > div:first-child {
         flex-shrink: 15;
     }
     > div:last-child {
         flex-grow: 1;
+    }
+
+    // tablet
+    @media only screen 
+        and (min-device-width: 768px) 
+        and (max-device-width: 1024px) 
+        and (-webkit-min-device-pixel-ratio: 1) 
+    {
+        display: flex;
+        flex-direction: column;
+    }
+
+    // phone
+    @media only screen 
+        and (min-device-width: 350px) 
+        and (max-device-width: 650px) 
+    {
+        display: flex;
+        flex-direction: column;
+
+        margin-top: 0;
+        padding: 1.5em;
+
+        .title {
+            font-size: 24px;
+        }
+        .first {
+            margin-right: 0;
+            font-size: 18px;
+        }
+        .second {
+            margin-right: 0;
+            font-size: 18px;
+        }
     }
 `;
 
@@ -46,6 +115,46 @@ const Logos = styled(ColumnPiece)`
 const StoryExplanation = styled(ColumnPiece)`
     padding: 5em;
     font-family: 'Roboto', sans-serif;
+
+    .title {
+        span {
+            font-size: 35px;
+            font-weight: 400;
+        }
+    }
+    .first {
+        margin-right: 150px;
+        font-size: 20px;
+        word-spacing: 2px;
+        font-weight: 300;
+    }
+    .second {
+        margin-right: 150px;
+        font-size: 20px;
+        word-spacing: 2px;
+        font-weight: 300;
+    }
+
+    // phone
+    @media only screen 
+        and (min-device-width: 350px) 
+        and (max-device-width: 650px) 
+    {
+        margin-top: 0;
+        padding: 1.5em;
+
+        .title {
+            font-size: 24px;
+        }
+        .first {
+            margin-right: 0;
+            font-size: 18px;
+        }
+        .second {
+            margin-right: 0;
+            font-size: 18px;
+        }
+    }
 `;
 
 const Stacks = styled(Row)`
@@ -83,20 +192,20 @@ const CpatPage = () => {
             <Layout>
                 <TitlePiece>
                     <p>
-                        <span style={{ fontSize: '35px', fontWeight: 400 }}>CPAT: Collaborative Pen-testing &amp; Analysis "Toolkit"</span>
+                        <span>CPAT: Collaborative Pen-testing &amp; Analysis "Toolkit"</span>
                     </p>
                 </TitlePiece>
                 <Subtitle>
                     <div>
                         <p>
-                            <span style={{ fontSize: '35px', fontWeight: 400 }}>Real-time, distributed</span>
+                            <span className="title">Real-time, distributed</span>
                         </p>
-                        <p style={{ marginRight: '150px', fontSize: '20px', wordSpacing: '2px', fontWeight: 300 }}>
+                        <p className="first">
                             Penetration tests are kicked off with reconnaissance commonly relying on OSINT resources. 
                             Relating those data points and keeping track of the work can be challenging. CPAT is a project 
                             that attempts to organize this data, and make operation possible on IoT devices.
                         </p>
-                        <p style={{ marginRight: '150px', fontSize: '20px', wordSpacing: '2px', fontWeight: 300 }}>
+                        <p className="second">
                             All while keeping data real-time and distributed across data stores.
                         </p>
                         <p>
@@ -120,14 +229,14 @@ const CpatPage = () => {
                     <Row>RPi</Row>
                 </Logos> */}
                 <StoryExplanation>
-                    <p>
-                        <span style={{ fontSize: '35px', fontWeight: 400 }}>But why?</span>
+                    <p className="title">
+                        <span>But why?</span>
                     </p>
-                    <p style={{ marginRight: '150px', fontSize: '20px', wordSpacing: '2px', fontWeight: 300 }}>
+                    <p className="first">
                         CPAT started as a naively hopeful academic project born out of a desire to learn more about infosec. 
                         It was a headfirst approach, and although leading the project, I didn't know what I didn't know.
                     </p>
-                    <p style={{ marginRight: '150px', fontSize: '20px', wordSpacing: '2px', fontWeight: 300 }}>
+                    <p className="second">
                         A professor in our department caught wind of our ideas and suggested we write a research paper. For a 
                         couple undergrads, this was simultaneously exciting and daunting. However, three months, two 100 hour 
                         weeks, and some incredulous editing later and we had our ticket to IEEE. 
@@ -135,7 +244,7 @@ const CpatPage = () => {
 
                     <a href="https://ieeexplore.ieee.org/document/7119262" style={{ color: 'white' }}>CPAT Research Paper</a>
 
-                    <p>
+                    <p className="third">
                         <i>
                             It's 5 years later. I'm tired of half-heartedly toying with this rough idea. It's time to create 
                             it or move on.
