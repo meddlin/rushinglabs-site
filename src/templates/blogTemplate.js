@@ -5,8 +5,30 @@ import SEO from "../components/seo";
 import styled from "styled-components";
 
 const PostContainer = styled.div`
-	margin: 0 8em 0 8em;
+    margin: 0 8em 0 8em;
+    
+    @media only screen 
+        and (min-device-width: 350px) 
+		and (max-device-width: 650px)
+	{
+        font-size: 15px;
+
+        h1 {
+            font-size: 1.8rem;
+            padding-bottom: 0.5rem;
+        }
+        h2 {
+            font-size: 1.4rem;
+        }
+
+        pre {
+            font-size: 0.85em;
+        }
+
+		margin: 0 0.5em 0 0.5em;
+	}
 `;
+
 const PostDate = styled.p`
 	font-size: 0.83255rem;
 	line-height: 1.75rem;
@@ -14,6 +36,7 @@ const PostDate = styled.p`
 	margin-bottom: 1.75rem;
 	margin-top: -1.75rem;
 `;
+
 const PostSeparator = styled.hr`
 	margin-bottom: 1.75rem;
 `;

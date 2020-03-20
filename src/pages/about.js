@@ -7,6 +7,13 @@ import SEO from "../components/seo";
 const HorizontalContainer = styled.div`
     display: flex;
     flex-direction: row;
+
+    @media only screen 
+        and (min-device-width: 350px) 
+		and (max-device-width: 650px)
+	{
+		flex-direction: column-reverse;
+	}
 `;
 const VerticalContainer = styled.div`
     display: flex;
@@ -14,6 +21,14 @@ const VerticalContainer = styled.div`
 
     font-family: 'Muli', sans-serif;
     padding: 0 10em 0 10em;
+
+    @media only screen 
+        and (min-device-width: 350px) 
+		and (max-device-width: 650px)
+	{
+        padding: 0 1em 0 1em;
+        margin-bottom: 2em;
+	}
 `;
 
 const Header = styled.h1`

@@ -6,12 +6,38 @@ const Article = styled.div`
     margin-bottom: 1.75rem;
 `;
 
+const ArticleHeaderContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    @media only screen 
+        and (min-device-width: 350px) 
+		and (max-device-width: 650px)
+	{
+        flex-direction: column;
+        align-items: flex-start;
+
+        small {
+            font-weight: bold;
+        }
+	}
+`;
+
 const ArticleHeading = styled.div`
     font-family: 'Source Sans Pro', sans-serif;    
     font-size: 1.6875rem;
     line-height: 2.4375rem;
     margin-top: 0;
     margin-bottom: .8125rem;
+
+    @media only screen 
+        and (min-device-width: 350px) 
+		and (max-device-width: 650px)
+	{
+		font-size: 22px;
+	}
 `;
 
 const ArticlePreview = styled.p`
@@ -22,14 +48,14 @@ const ArticlePreview = styled.p`
 
 const PostLink = ({ post }) => (
     <Article>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <ArticleHeaderContainer>
             <ArticleHeading>
                 <Link style={{ boxShadow: 'none' }} to={post.frontmatter.path}>
                     {post.frontmatter.title}
                 </Link>
             </ArticleHeading>
             <small>{post.frontmatter.date}</small>
-        </div>
+        </ArticleHeaderContainer>
 
         <ArticlePreview dangerouslySetInnerHTML={{ __html: post.excerpt }} />
         {post.frontmatter.tags && post.frontmatter.tags.length > 1 ? <span>

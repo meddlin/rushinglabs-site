@@ -35,6 +35,17 @@ const BioBlurb = styled.div`
         min-width: 100px;
         max-height: 100px;
     }
+
+    @media only screen 
+        and (min-device-width: 350px) 
+		and (max-device-width: 650px)
+	{
+        flex-direction: row;
+        
+        img {
+            margin-right: 1em;
+        }
+	}
 `;
 
 const SiteSections = styled.div`
