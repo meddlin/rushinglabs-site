@@ -10,13 +10,28 @@ import SEO from "../components/seo";
 const HorizontalContainer = styled.div`
     display: flex;
 	flex-direction: row;
+
+	@media only screen 
+        and (min-device-width: 350px) 
+		and (max-device-width: 650px)
+	{
+		flex-direction: column-reverse;
+	}
 `;
 
 const VerticalContainer = styled.div`
     display: flex;
     flex-direction: column;
 
-    padding: 0 3em 0 3em;
+	padding: 0 3em 0 3em;
+	
+	@media only screen 
+        and (min-device-width: 350px) 
+		and (max-device-width: 650px)
+	{
+		margin-bottom: 5em;
+		padding: 0 1em 0 1em;
+	}
 `;
 
 const IndexPage = ({
