@@ -1,6 +1,6 @@
 ---
 path: "/blog/cockroachdb-distributed-schema-changes"
-date: "2020-05-09"
+date: "2020-05-18"
 title: "Cockroach DB Distributed Schema Changes"
 tags: ["cpat"]
 ---
