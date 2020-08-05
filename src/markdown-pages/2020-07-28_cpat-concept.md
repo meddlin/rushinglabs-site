@@ -9,7 +9,7 @@ tags: ["cpat"]
 
 _This is gonna be a long one..._
 
-I've been working on my CPAT project for a while now. I felt like I needed to get it to a precipice where the idea was either proven, or it all fell apart.
+I've been working on my CPAT project for a while now. I felt like I needed to get it to a point where the idea was either proven, or it all fell apart.
 
 The [last real progress for this project](https://rushinglabs.com/blog/one-step-at-a-time) I shared was from 2018, and covered how the project was moving to React. While true, several more developments have taken place since then. 
 
@@ -42,6 +42,7 @@ So, this led me to redesign the project properly introducing micro-services. Yes
     - [React.js](https://reactjs.org/)
     - [Redux](https://redux.js.org/)
     - [Evergreen](https://evergreen.segment.com/) for UI
+    - _and some other stuff_
 - Core API
     - [.NET Core](https://docs.microsoft.com/en-us/dotnet/core/about)
     - [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-3.1)
@@ -59,28 +60,101 @@ _...and orchestrated with Docker for the time being._
 
 <hr />
 
-The concept of CPAT has been proven to have an acceptable level of plausibility and technical function. Yes, the last release was titled "leaving the concept phase" or whatever, but...now we can talk about it.
+## Moving Data through the Pipeline
 
-The main _features of design_ (characteristics?) we were shooting for were:
+Taking a step back, this "a real-time, collaborative, decentralized application" for pentesting, is just a _streaming ETL pipeline at its core_. Well, _I say "just"_. Since I've never built one of these before, that means I needed to prove the core features could actually work--at least in theory--before moving onto the more sensible software design chores. _Especially that data decentralization one._
 
-- Collaborative
-- Real-time
-- Decentralized data (_or possibility of it_)
+- Real-time: Websockets connection between React and .NET Core via SignalR
+- Collaborative: data from one user's actions automatically propagated to another user's available data (_this is complicated_)
+- Decentralized: no single "node" of the system is a complete point of failure (_this is more complicated_)
 - Service-oriented
 - Full-text search
 - Manageable on consumer hardware
 
-## Future Improvements, Current Drawbacks
+This is a rough idea of the architecture.
 
-A brief overview of the more immediate hurdles in front of the next things to be done.
+<img src="https://meddlin-web.s3.us-east-2.amazonaws.com/2020-08-04_post_cpat-concept/2020-08-04+23_10_42-Window.png" />
 
-###  Collaborative
+**cpat-client**
 
-Currently, the UI doesn't look too collaborative. _However_, it is possible to open the application in two  separate browser instances (i.e. one "normal", one incognito mode) and create data at the same time. This shows a primitive level of "collaboration", if we're stretching the word.
+_Tooling: React.js front-end_
+
+It connects to `cpat-core` via Websockets and basic REST calls. It also sends REST calls to `osint-api` when a script kickoff is requested. Currently using Redux for the REST data, but I have a kludgy implementation for the Websockets communication. At this point it's good just to have things working. Relatively speaking, once I figured out how to make a Websocket connection on-demand and on page load...this was the easy part.
+
+**cpat-core**
+
+_Tooling: C#, .NET Core API, NPoco_
+
+This is the main "business logic" for CPAT. Even though, Kafka is enabling the stream processing, which is much heavier lifting than `cpat-core`, this central API is commanding the data. `cpat-core` sets the tone for how data should be treated across the whole system.
+
+Any new data entered manually from `cpat-client` is funnelled through here to MongoDB. `cpat-client` relies on `cpat-core` for Websocket connections, too. The idea being that with Websockets the networking foundations exist for live data to be piped back to the web client regardless if it comes from another user manually entering/uploading data, or some automated script in `osint-api` uploading results.
+
+Notice `cpat-client` has a connection to `osint-api`, and then onto `cpat-core`. The Python `osint-api` sends job metadata to `cpat-core` when `cpat-client` request a script be kicked off. So `cpat-core` is storing and retrieving job analytics as well.
+
+On the backend, `cpat-core` also has ORM logic to communicate with MongoDB provided via NPoco. This is pretty standard-faire; just wanted to mention it as its another concern funneling data to the data storage.
+
+**OSINT API**
+
+_Tooling: Python, Flask, various OSINT tools_
+
+Any script or tool set to be automated via the `cpat-client` is "hosted" or configured here. I'm using the Flask framework to build the REST API quickly, and this should be considered highly-experimental. There is a whole slew of security concerns opening up automation tools that run within a CLI. Plenty of logistical issues too. Each tool (for now only `nmap`) is kicked off in a new process with `Popen`. This means ferrying data is primarily done by managing `STDIN`, `STDOUT`, and `STDERR`. Not to mention, OSINT tools are scanning across the public internet, and any files dumped from such a tool would also need to be managed. 
+
+_We can just call this a minefield._
+
+Providing OSINT tools behind a REST API also opens a big question for extensibility. While the theoretical capability of kicking off a few dozen long-running scan tools, asynchronously uploading their results, and watching CPAT re-analyze as the dataset grows larger is enticing...it would be difficult to dynamically add more tooling behind the API. Especially since the tools are tightly coupled to their CLI implementation, require unique automation parameters, and are sending back schema-less data.
+
+Needless to say this is a piece of CPAT I wanted to integrate for testing and "concept" purposes, but for now I'm not keen on deploying this anywhere. This type of tooling can be integrated in other ways.
+
+**MongoDB and a note on CockroachDB**
+
+MongoDB is currently in the architecture diagrams--it's all pretty standard here. Except...
+
+> Long story short, CPAT's current design heavily relies (relied?) on CockroachDB to provide native data decentralization. CockroachDB is marketed as a "resilient geo-distributed SQL database". Impressive. And to be direct, an appropriate price follows those features. Yes, the core product is [freely available](https://www.cockroachlabs.com/get-started-cockroachdb/?utm_expid=.k5d4bN3bS82Lb-CYzJK9_g.1&utm_referrer=https%3A%2F%2Fwww.cockroachlabs.com%2F) and [open-source](https://github.com/cockroachdb/cockroach), however the [CDC feature](https://www.cockroachlabs.com/docs/stable/change-data-capture.html) is limited to paid offerings. This isn't to paint CRDB or CockroachLabs in a poor light--_their product is worth every penny_. Unfortunately though, until I can provide enough funding CPAT will have to get by with whatever solution can be built with other database systems.
+>
+> See: `EXPERIMENTAL CHANGEFEED` vs. `CREATE CHANGEFEED`) [https://www.cockroachlabs.com/docs/stable/change-data-capture.html#configure-a-changefeed-enterprise](https://www.cockroachlabs.com/docs/stable/change-data-capture.html#configure-a-changefeed-enterprise)
+
+After that discovery, the switch was made to MongoDB. It's not a perfect replacement (_honestly, not sure if any other DB offers what CRDB does_), but it will suffice while CPAT is in an alpha/proof-of-concept stage.
+
+The keen-eyed will notice this was a switch from a SQL-compliant RDBMS to a NoSQL, document-based database. Coming from Meteor.js initially, MongoDB was actually my first choice just to keep things simple and continue using what I had before. Considering the schema-less nature of the unfiltered OSINT data I would be capturing, all of this seemed to be working naturally anyway. So, I actually had to design around CRDB's relational structure; moving to back to MongoDB removed some of this. 
+
+The specifics of the schema changes and some of CRDB's other intricacies are outside the scope of this post, but that is all to say _real-time data_ and _decentralization_ are completely _**possible**_ just expensive.
+
+**Kafka and ElasticSearch**
+
+These pieces have given me the most grief. Kafka, ksql-db, and the possibilities for manipulating data in a streaming pipeline are completely new to me. Further, while I've worked with ElasticSearch before, I didn't realize until putting the final pieces together that I hadn't stopped to consider some real data denormalization concerns for what I was planning on indexing into Elastic.
+
+_Humbling._
+
+For now, it works enough for me to call it a success. Much of Kafka and ksql remain a black box to me, but after somehow setting up a rudimentary implementation of it all...I _was_ able to push data from `cpat-core` to Mongo to Kafka and onto Elastic. This meant:
+
+- Received real-time data flow for ingesting into Mongo _and showing up on separate `cpat-client` instances_
+- Automatic pushing to Elastic for search capabilities
+
+> _A note on analytics._
+>
+> The next step here is to integrate more of the ELK stack for analytics. Another win for setting up the backend in Docker containers this early in the project was to enable quick access to [Kibana](https://www.elastic.co/kibana) and the [Elastic Observability products](https://www.elastic.co/observability). It's possible to experiment with [Elastic SIEM](https://www.elastic.co/security) from here too--unsure if that fits the intention of CPAT though.
+
+**Architecture**
+
+So, in theory, the "full" architecture should resemble something like the following when deployed to a server(s). Consider this diagram a very _"hand-wavy idea"_ though. I hope it's an accurate representation of how data flows through clustered instances of MongoDB, Kafka, and ElasticSearch, but for now I'll admit there's much for me to learn on those systems.
+
+<img src="https://meddlin-web.s3.us-east-2.amazonaws.com/2020-08-04_post_cpat-concept/2020-08-04+23_58_08-containerized-arch.png" />
+
+> _A note on early scalability_
+> 
+> _Normally, I wouldn't front-load a project with so much effort for scalability. However, that feature was central to the original idea that inspired me to try this at all. Without horizontal scaling and some semblance towards decentralization, the project could've stayed on Meteor.js or just reverted to being a CRUD/ETL workflow focused on network pentesting. All of which is fine just not as fun._
+
+<hr />
+
+## Future Improvements
+
+### Collaboration
+
+Currently, the UI doesn't look very good. _However_, it is possible to open the application in two separate browser instances (i.e. one "normal", one incognito mode) and create data at the same time. This shows a primitive level of "collaboration", if we're stretching the word.
 
 What's needed?
 
-- Support for separate users
+- Support for separate users (i.e. separate data to separate users)
 - Associate data created to specific users
 - JWT support and some basic security _kind of_ follows naturally from allowing user accounts.
 
