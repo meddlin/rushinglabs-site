@@ -5,17 +5,15 @@ title: "CPAT Concept is Proven"
 tags: ["cpat"]
 ---
 
-# It works! ...well, sorta
+_It works! ...well, sorta_
 
-_This is gonna be a long one..._
+I've been working on my CPAT project for a while now. Quite honestly, I've grown tired of looking at ideas instead of code. So, I felt I needed to push for the inflection point where it was either proven, or failed in spectacular over-ambition.
 
-I've been working on my CPAT project for a while now. I felt like I needed to get it to a point where the idea was either proven, or it all fell apart.
-
-The [last real progress for this project](https://rushinglabs.com/blog/one-step-at-a-time) I shared was from 2018, and covered how the project was moving to React. While true, several more developments have taken place since then. 
+The [last real progress for this project](https://rushinglabs.com/blog/one-step-at-a-time) I shared was from 2018, and mentioend the project was moving to React. While yes, I did finally make the move to React, I also completely redesigned the system.
 
 ## Recap: What are we trying to accomplish?
 
-_In short: a real-time, collaborative, decentralized application for network pentesting engagements._
+_In short, it's a real-time, collaborative, decentralized application for network pentesting engagements._
 
 Way back in 2014, while working with a friend in college, we wanted to know if it was possible to build data aggregation for OSINT tools. This was fueled by seeing real-time data moving in [Meteor.js](https://www.meteor.com/#!). This project went on to get us through our senior capstone class, and even spark a [research paper](https://ieeexplore.ieee.org/document/7119262). _Fun stuff._
 
@@ -30,19 +28,22 @@ Before any of those motions, it was the [LAIR project from DEFCON 21](https://ww
 
 I liked LAIR being real-time and collaborative, but I wanted to see if I could introduce a new feature: _data decentralization--ideally geographically decentralized._
 
-_At the time, I didn't realize how far ahead of my own capabilities I was by seeking these three features, together._
+_At the time, I didn't realize how far above my head I was by shooting for all of that together. I still don't, but I didn't then either._ ¯\\_(ツ)_/¯
 
-## Recap: New Tech Stack
+<hr />
 
-For a while I tried to recreate this project on my own with Meteor.js, but I quickly ran into scalability concerns and complexity issues. I quickly learned one of the key issues with Meteor.js was its app server. You could load balance (somewhat) across the front-ends, and setup MongoDB clusters and Redis caches--_**but there ultimately needed to be a Meteor instance to tie the reactivity together.**_
+## New Tech Stack
 
-So, this led me to redesign the project properly introducing micro-services. Yes, it laid the ground work for scaling later on, but gave me an out to upgrade any "piece" of the project if technologies were moving faster than I could develop. So, I decided on a new stack:
+For a while I tried to recreate this project with Meteor.js, but I quickly ran into scalability concerns and complexity issues. Meteor scales relatively well for certain application designs, but I was seeking something truly decentralized. Meteor's app server design runs pretty counter to that.
+
+So, I needed to abandon Meteor.js, and choose something else--leading to micro-services. Using a service-oriented architecture did lay the ground work for scaling later on, but it also gave me a means to upgrade any "piece" of the project if technologies were moving faster than I could develop. So, I decided on a new stack:
 
 - Web application
     - [React.js](https://reactjs.org/)
     - [Redux](https://redux.js.org/)
     - [Evergreen](https://evergreen.segment.com/) for UI
-    - _and some other stuff_
+    - [Formik](https://formik.org/)
+    - _and lots of dependencies_
 - Core API
     - [.NET Core](https://docs.microsoft.com/en-us/dotnet/core/about)
     - [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-3.1)
@@ -56,13 +57,11 @@ So, this led me to redesign the project properly introducing micro-services. Yes
 - Search
     - [ElasticSearch](https://www.elastic.co/)
 
-_...and orchestrated with Docker for the time being._
-
-<hr />
+_...and it's orchestrated with Docker for the time being._
 
 ## Moving Data through the Pipeline
 
-Taking a step back, this "a real-time, collaborative, decentralized application" for pentesting, is just a _streaming ETL pipeline at its core_. Well, _I say "just"_. Since I've never built one of these before, that means I needed to prove the core features could actually work--at least in theory--before moving onto the more sensible software design chores. _Especially that data decentralization one._
+Taking a step back, this "real-time, collaborative, decentralized application" for pentesting, is a _streaming ETL pipeline at its core_. Since I've never built one of these before, that means I needed to prove the core features could actually work--at least in theory--before moving onto the more sensible software design chores. _Especially that data decentralization one._
 
 - Real-time: Websockets connection between React and .NET Core via SignalR
 - Collaborative: data from one user's actions automatically propagated to another user's available data (_this is complicated_)
@@ -71,7 +70,7 @@ Taking a step back, this "a real-time, collaborative, decentralized application"
 - Full-text search
 - Manageable on consumer hardware
 
-This is a rough idea of the architecture.
+This diagram is a rough idea of the architecture.
 
 <img src="https://meddlin-web.s3.us-east-2.amazonaws.com/2020-08-04_post_cpat-concept/2020-08-04+23_10_42-Window.png" />
 
@@ -136,13 +135,13 @@ For now, it works enough for me to call it a success. Much of Kafka and ksql rem
 
 **Architecture**
 
-So, in theory, the "full" architecture should resemble something like the following when deployed to a server(s). Consider this diagram a very _"hand-wavy idea"_ though. I hope it's an accurate representation of how data flows through clustered instances of MongoDB, Kafka, and ElasticSearch, but for now I'll admit there's much for me to learn on those systems.
+So, in theory, the "full" architecture should resemble something like the following when deployed. Consider this diagram a very _"hand-wavy idea"_ though. I hope it's an accurate representation of how data flows through clustered instances of MongoDB, Kafka, and ElasticSearch, but for now I'll admit there's much for me to learn on those systems.
 
 <img src="https://meddlin-web.s3.us-east-2.amazonaws.com/2020-08-04_post_cpat-concept/2020-08-04+23_58_08-containerized-arch.png" />
 
 > _A note on early scalability_
 > 
-> _Normally, I wouldn't front-load a project with so much effort for scalability. However, that feature was central to the original idea that inspired me to try this at all. Without horizontal scaling and some semblance towards decentralization, the project could've stayed on Meteor.js or just reverted to being a CRUD/ETL workflow focused on network pentesting. All of which is fine just not as fun._
+> _Normally, I wouldn't front-load a project with so much effort for scalability. However, that aspect was central to the original idea that inspired me to try this at all. Without horizontal scaling and some semblance towards decentralization, the project could've stayed on Meteor.js or just reverted to being a CRUD/ETL workflow focused on network pentesting. All of which is fine just not as fun._
 
 <hr />
 
@@ -150,7 +149,7 @@ So, in theory, the "full" architecture should resemble something like the follow
 
 ### Collaboration
 
-Currently, the UI doesn't look very good. _However_, it is possible to open the application in two separate browser instances (i.e. one "normal", one incognito mode) and create data at the same time. This shows a primitive level of "collaboration", if we're stretching the word.
+Currently, the UI is basically nonexistent. _However_, it is possible to open the application in two separate browser instances (i.e. one "normal", one incognito mode) and create data at the same time. This shows a primitive level of "collaboration", if we're stretching the word.
 
 What's needed?
 
@@ -171,7 +170,7 @@ What's needed?
 
 ### Decentralized data
 
-This is theoretically proven through seeing how others have operated CockroachDB and MongoDB at varying levels of decentralization. See the note on _funding for CRDB_ below for why CPAT opted for MongoDB over CRDB. _This feature is key to demonstrating whether it's possible to have a truly cloud-agnostic deployment one day._ Unfortunately, it also stands as the most difficult to develop/test independently--so, we must mostly rely on the stories from others' adventures.
+This is theoretically proven through seeing how others have operated CockroachDB and MongoDB at varying levels of decentralization. See the note on _funding for CRDB_ below for why I opted for MongoDB over CRDB. _This feature is key to demonstrating whether it's possible to have a truly cloud-agnostic deployment one day._ Unfortunately, it also stands as the most difficult to develop/test independently--so, we must mostly rely on the stories from others' adventures.
 
 What's needed?
 
@@ -181,11 +180,11 @@ What's needed?
 
 ### Service-oriented
 
-To even attempt this project in a monolithic fashion is a non-starter. The desires of the project are micro-service oriented just by nature...and  it works.
+To even attempt this project in a monolithic fashion is a non-starter. The desires of the project are micro-service oriented just by nature...and it works.
 
 What's needed?
 
-- A sane way to enabled HTTPS across all services.
+- A sane way to enable HTTPS across all services.
 - Revisit the various data models used as data is communicated across each service.
 
 ### Full-text Search
@@ -201,7 +200,7 @@ What's needed?
 
 ### Manageable on consumer hardware
 
-The most important statement I wanted to make with this project was for what's possible on consumer hardware now, with a little bit of engineering. Development started on a 2011 Mac mini (when the project was on Meteor.js), and is now on a more modern, powerful machine but still very "consumer". Currently, it's being developed with a Ryzen 7 3800X, 32GB of RAM, and "enough" SSD storage space. It's not cheap or "entry-level", but still very much approachable for many developers. 
+The most important statement I wanted to make with this project was for what's possible on consumer hardware now, with a little bit of engineering. Development started on a 2011 Mac mini (when the project was on Meteor.js), and is now on a more modern, powerful machine but still very "consumer". Currently, it's being developed with a Ryzen 7 3800X, 32GB of RAM, and "enough" SSD storage space. It's not cheap or "entry-level", but still approachable.
 
 What's needed?
 
