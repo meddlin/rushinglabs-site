@@ -3,6 +3,9 @@
   "private": true,
   "description": "A simple starter to get up and developing quickly with Gatsby",
   "version": "0.1.0",
+  "engines": {
+    "node": "12.x"
+  },
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "@weknow/gatsby-remark-twitter": "^0.2.3",
@@ -34,6 +37,7 @@
   ],
   "license": "MIT",
   "scripts": {
+    "build": "gatsby build",
     "heroku-postbuild": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
