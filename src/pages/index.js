@@ -47,7 +47,6 @@ const IndexPage = ({
 		<Layout>
 			<SEO title="Home" />
 			<HorizontalContainer>
-				{/* <Image /> */}
 				<Bio />
 
 				<VerticalContainer>
